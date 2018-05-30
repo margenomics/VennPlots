@@ -1,0 +1,9 @@
+Package: VennPlots
+Type: Package
+Title: Package to make Venn diagrams and genes corresponding to each region of the plot.
+Version: 1.0
+Date: 2018-05-30
+Author: Magdalena Arnal Segura <marnal@imim.es>
+Maintainer: Magdalena Arnal Segura <marnal@imim.es>
+Description: This package helps to make Venn diagrams combining 2,3,4 and even 5 gene lists. It also provides a .csv or .xls with the list of genes corresponding to each region of the plot. 
+License: MIT + file LICENSE
