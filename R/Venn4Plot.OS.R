@@ -17,8 +17,13 @@ function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkEx
     cols <- c(brewer.pal(8,"Pastel1"), brewer.pal(8,"Pastel2"))  #Fixar els colors per als venn diagrams amb 4 condicions
     cols <- cols[c(8,2,3,15,5,6,7,1,9,10,11,12,13,14,4,16)]      ##Reorganitzar els colors per a que no coincideixin tonalitats semblants
     
-    #Creem l'objecte del Venn
+    #Ens assegurem de que no hi ha NA
+    listG1 <- listG1[!is.na(listG1)]
+    listG2 <- listG2[!is.na(listG2)]
+    listG3 <- listG3[!is.na(listG3)]
+    listG4 <- listG4[!is.na(listG4)]
     
+    #Creem l'objecte del Venn
     list.venn<-list(listG1,listG2,listG3, listG4)
     names(list.venn)<-c(listNames[1],listNames[2],listNames[3], listNames[4])
     vtest<-Venn(list.venn)
