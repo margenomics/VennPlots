@@ -15,8 +15,11 @@ function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE){
   
   cols <- brewer.pal(8,"Pastel2") 
   
-  #Creem l'objecte del Venn
+  #Ens assegurem de que no hi ha NA
+  listG1 <- listG1[!is.na(listG1)]
+  listG2 <- listG2[!is.na(listG2)]
   
+  #Creem l'objecte del Venn
   list.venn<-list(listG1,listG2)
   names(list.venn)<-c(listNames[1],listNames[2])
   vtest<-Venn(list.venn)
