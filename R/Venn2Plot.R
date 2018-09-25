@@ -22,6 +22,8 @@ function(listG1, listG2, listNames, filename, data4T= NULL, symbols=TRUE,
   
   #Creem l'objecte del Venn
   if (symbols){
+    listG1<-listG1[!is.na(listG1[,colnmes[2]]),]
+    listG2<-listG2[!is.na(listG2[,colnmes[2]]),]
     list1<-listG1[,colnmes[2]]
     list2<-listG2[,colnmes[2]]
   }else{
