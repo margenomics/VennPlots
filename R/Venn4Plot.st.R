@@ -24,6 +24,12 @@ function(list1, list2, list3, list4,listNames, filename, Table1,
     resultsDir=resDir
   }
   
+  #Ens assegurem de que no hi ha NA
+  list1 <- list1[!is.na(list1)]
+  list2 <- list2[!is.na(list2)]
+  list3 <- list3[!is.na(list3)]
+  list4 <- list4[!is.na(list4)]
+  
   #Creem l'objecte del Venn
   list.venn<-list(list1,list2,list3, list4)
   names(list.venn)<-c(listNames[1],listNames[2],listNames[3], listNames[4])
