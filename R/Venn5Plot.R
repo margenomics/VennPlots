@@ -10,6 +10,11 @@ function(listG1,listG2,listG3,listG4,listG5,listNames,filename,data4T= NULL,symb
   
   #Creem l'objecte del Venn
   if (symbols){
+    listG1<-listG1[!is.na(listG1[,colnmes[2]]),]
+    listG2<-listG2[!is.na(listG2[,colnmes[2]]),]
+    listG3<-listG3[!is.na(listG3[,colnmes[2]]),]
+    listG4<-listG4[!is.na(listG4[,colnmes[2]]),]
+    listG5<-listG5[!is.na(listG5[,colnmes[2]]),]
     list.1<-listG1[,colnmes[2]]
     list.2<-listG2[,colnmes[2]]
     list.3<-listG3[,colnmes[2]]
