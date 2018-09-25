@@ -2,9 +2,9 @@ Venn3Plot.OS <-
 function(listG1, listG2, listG3, listNames, filename, data4T= NULL,
                       mkExcel = TRUE){
   #Funció per fer un venn diagram 3D
-  #listG1: Data frame amb els resultats del data4Tyers del primer grup que volem comparar
-  #listG2: Data frame amb els resultats del data4Tyers del segon grup que volem comparar
-  #listG3: Data frame amb els resultats del data4Tyers del tercer grup que volem comparar
+  #listG1: Vector of genes in group1
+  #listG2: Vector of genes in group2
+  #listG3: Vector of genes in group3
   #listNames: vector with the names of the lists of genes (normally contrasts)
   #filename: nom dels fitxers
   #data4T: Data4Tyers
@@ -15,6 +15,11 @@ function(listG1, listG2, listG3, listNames, filename, data4T= NULL,
   require(RColorBrewer)  
   #establim els colors per als plots
   cols <- brewer.pal(8,"Pastel2") 
+  
+  #Ens assegurem de que no hi ha NA
+  listG1 <- listG1[!is.na(listG1)]
+  listG2 <- listG2[!is.na(listG2)]
+  listG3 <- listG3[!is.na(listG3)]
   
   #Creem l'objecte del Venn
   list.venn<-list(listG1,listG2,listG3)
