@@ -19,8 +19,11 @@ function(list1, list2, listNames, filename, Table1, Table2,
     resultsDir=resDir
   }
   
-  #Creem l'objecte del Venn
+  #Ens assegurem que no hi ha NA
+  list1 <- list1[!is.na(list1)]
+  list2 <- list2[!is.na(list2)]
   
+  #Creem l'objecte del Venn
   list.venn<-list(list1,list2)
   names(list.venn)<-c(listNames[1],listNames[2])
   vtest<-Venn(list.venn)
