@@ -109,17 +109,17 @@ function(listG1, listG2,listNames,filename,data4T= NULL, symbols=TRUE,
       
       write.csv2(data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`10`),
                         cNames],
-                 file= file.path(resultsDir,paste("VennGenes",listNames[1],"csv",sep=".")),
+                 file= file.path(resultsDir,paste("VennGenes",filename,listNames[1],"csv",sep=".")),
                  row.names = FALSE)
       
       write.csv2(data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`01`),
                         cNames],
-                 file= file.path(resultsDir,paste("VennGenes",listNames[2],"csv",sep=".")),
+                 file= file.path(resultsDir,paste("VennGenes",filename,listNames[2],"csv",sep=".")),
                  row.names = FALSE)
       
       write.csv2(data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`11`),
                         cNames],
-                 file= file.path(resultsDir,paste("VennGenes","Common","csv",sep=".")),
+                 file= file.path(resultsDir,paste("VennGenes",filename,"Common","csv",sep=".")),
                  row.names = FALSE)
     }
   }
