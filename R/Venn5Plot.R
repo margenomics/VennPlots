@@ -1,5 +1,5 @@
 Venn5Plot <- function(list.1,list.2,list.3,list.4,list.5,listNames,filename,data4T= NULL,
-           img.fmt = "png", mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5)){ 
+           img.fmt = "pdf", mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5)){ 
     require(Vennerable) 
     require(colorfulVennPlot) #Per generar plots amb colors diferents
     require(RColorBrewer)
