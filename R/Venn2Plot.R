@@ -1,6 +1,6 @@
 Venn2Plot <-
 function(listG1, listG2, listNames, filename, data4T= NULL, symbols=TRUE, 
-                      mkExcel = TRUE, colnmes= c("AffyID", "Symbol")){
+                      mkExcel = TRUE, colnmes= c("AffyID", "Symbol"), img.fmt= "png"){
   #Funció per fer un venn diagram 2D
   #listG1: Data frame amb els resultats del data4Tyers del primer grup que volem comparar
   #listG2: Data frame amb els resultats del data4Tyers del segon grup que volem comparar
@@ -38,7 +38,11 @@ function(listG1, listG2, listNames, filename, data4T= NULL, symbols=TRUE,
   
   #PLOT VENN
   #els noms estan al reves al plot labels
-  pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  if(img.fmt == "png") {
+    png(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  } else if (img.fmt == "pdf"){
+    pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  }
   plotVenn2d(vennData, labels=c(listNames[2],listNames[1]), Colors=cols, Title="", shrink=1)
   dev.off()
   
