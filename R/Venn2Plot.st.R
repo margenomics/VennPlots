@@ -32,7 +32,7 @@ function(list1, list2, listNames, filename, Table1, Table2, img.fmt = "png",
   #PLOT VENN
   #els noms estan al reves al plot labels
   if(img.fmt == "png") {
-    png(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+    png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
   } else if (img.fmt == "pdf"){
     pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
   }
