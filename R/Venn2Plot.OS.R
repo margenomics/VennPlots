@@ -1,5 +1,5 @@
 Venn2Plot.OS <-
-function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE){
+function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE, img.fmt = "png"){
   #Funció per fer un venn diagram 2D
   #listG1: Vector amb els gene sym de la llista 1
   #listG2: Vector amb els gene sym de la llista 2
@@ -27,7 +27,11 @@ function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE){
   
   #PLOT VENN
   #els noms estan al reves al plot labels
-  pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  if(img.fmt == "png") {
+    png(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  } else if (img.fmt == "pdf"){
+    pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  }
   plotVenn2d(vennData, labels=c(listNames[2],listNames[1]), Colors=cols, Title="", shrink=1)
   dev.off()
   
