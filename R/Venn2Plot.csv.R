@@ -1,5 +1,5 @@
 Venn2Plot.csv <-
-function(listG1, listG2,listNames,filename,data4T= NULL, symbols=TRUE, img.fmt = "png"
+function(listG1, listG2,listNames,filename,data4T= NULL, symbols=TRUE, img.fmt = "pdf"
                       mkExcel = TRUE, mkCSV=FALSE, colnmes= c("AffyID", "Symbol")){
   #Funció per fer un venn diagram 2D
   #listG1: Data frame amb els resultats del data4Tyers del primer grup que volem comparar
