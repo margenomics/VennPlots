@@ -31,7 +31,11 @@ function(list1, list2, listNames, filename, Table1, Table2,
   
   #PLOT VENN
   #els noms estan al reves al plot labels
-  pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  if(img.fmt == "png") {
+    png(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  } else if (img.fmt == "pdf"){
+    pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  }
   plotVenn2d(vennData, labels=c(listNames[2],listNames[1]), Colors=cols, Title="", shrink=1)
   dev.off()
   
