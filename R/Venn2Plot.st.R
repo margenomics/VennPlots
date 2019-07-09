@@ -1,5 +1,5 @@
 Venn2Plot.st <-
-function(list1, list2, listNames, filename, Table1, Table2, 
+function(list1, list2, listNames, filename, Table1, Table2, img.fmt = "png",
                       ColName= "GeneSymbol", resDir=NULL){
   
   #list1: Vector amb els Gene symbols de una de les llistes
