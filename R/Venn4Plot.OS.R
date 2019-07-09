@@ -1,5 +1,5 @@
 Venn4Plot.OS <-
-function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkExcel = TRUE, img.fmt = "png"){
+function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkExcel = TRUE, img.fmt = "pdf"){
     #Funció per fer un venn diagram 3D
     #listG1: vector amb els gens o TCI DE primer grup que volem comparar
     #listG2: vector amb els gens o TCI DE del segon grup que volem comparar
