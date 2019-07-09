@@ -1,5 +1,5 @@
 Venn4Plot.OS <-
-function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkExcel = TRUE){
+function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkExcel = TRUE, img.fmt = "png"){
     #Funció per fer un venn diagram 3D
     #listG1: vector amb els gens o TCI DE primer grup que volem comparar
     #listG2: vector amb els gens o TCI DE del segon grup que volem comparar
@@ -30,7 +30,11 @@ function(listG1, listG2, listG3, listG4, listNames, filename, data4T= NULL, mkEx
     vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
     
     #PLOT VENN
-    pdf(file.path(resultsDir,paste("VennDiagram",filename, "pdf",sep=".")))
+    if(img.fmt == "png") {
+        png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
+    } else if (img.fmt == "pdf"){
+        pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+    }
     plotVenn4d(vennData[-1], labels=c(listNames[1],listNames[2],listNames[3], listNames[4]), 
                Colors=cols, Title="", shrink=0.8)
     dev.off()
