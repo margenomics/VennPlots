@@ -1,5 +1,5 @@
 Venn4Plot.st <-
-function(list1, list2, list3, list4,listNames, filename, Table1, 
+function(list1, list2, list3, list4,listNames, filename, Table1, img.fmt = "png",
                       Table2, Table3, Table4, ColName= "GeneSymbol", resDir=NULL ){
   
   #list1: Vector amb els Gene symbols de una de les llistes
@@ -37,7 +37,11 @@ function(list1, list2, list3, list4,listNames, filename, Table1,
   vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
   
   #PLOT VENN
-  pdf(file.path(resultsDir,paste("VennDiagram",filename, "pdf",sep=".")))
+  if(img.fmt == "png") {
+    png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
+  } else if (img.fmt == "pdf"){
+    pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+  }
   plotVenn4d(vennData[-1], labels=c(listNames[1],listNames[2],listNames[3], listNames[4]), 
              Colors=cols, Title="", shrink=0.8)
   dev.off()
