@@ -1,5 +1,5 @@
 Venn5Plot <- function(list.1,list.2,list.3,list.4,list.5,listNames,filename,data4T= NULL,
-           mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5)){ 
+           img.fmt = "png", mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5)){ 
     require(Vennerable) 
     require(colorfulVennPlot) #Per generar plots amb colors diferents
     require(RColorBrewer)
@@ -14,7 +14,12 @@ Venn5Plot <- function(list.1,list.2,list.3,list.4,list.5,listNames,filename,data
     vtest<-Venn(list.venn)
     
     require(VennDiagram)
-    pdf(file.path(resultsDir,paste("VennDiagram",filename, "pdf",sep=".")))
+    if(img.fmt == "png") {
+           png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
+    } else if (img.fmt == "pdf"){
+           pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+    }
+    
     venn.plot <- draw.quintuple.venn(
       area1 = length(list.1),
       area2 = length(list.2),
