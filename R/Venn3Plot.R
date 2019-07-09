@@ -1,6 +1,6 @@
 Venn3Plot <-
 function(listG1, listG2, listG3, listNames, filename, data4T= NULL, symbols=TRUE, 
-                      mkExcel = TRUE, colnmes= c("AffyID", "Symbol")){
+                      mkExcel = TRUE, colnmes= c("AffyID", "Symbol"), img.fmt = "png"){
   #Funció per fer un venn diagram 3D
   #listG1: Data frame amb els resultats del data4Tyers del primer grup que volem comparar
   #listG2: Data frame amb els resultats del data4Tyers del segon grup que volem comparar
