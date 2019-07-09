@@ -28,7 +28,7 @@ function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE, img.
   #PLOT VENN
   #els noms estan al reves al plot labels
   if(img.fmt == "png") {
-    png(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+    png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
   } else if (img.fmt == "pdf"){
     pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
   }
