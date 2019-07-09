@@ -1,6 +1,6 @@
 Venn3Plot.OS <-
 function(listG1, listG2, listG3, listNames, filename, data4T= NULL,
-                      mkExcel = TRUE){
+                      mkExcel = TRUE, img.fmt = "png"){
   #Funció per fer un venn diagram 3D
   #listG1: Vector of genes in group1
   #listG2: Vector of genes in group2
