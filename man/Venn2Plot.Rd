@@ -8,7 +8,7 @@ Venn diagrams for two tables of genes.
 Function to make Venn diagrams from two tables containing the columns with array ids or gene symbols, ideally both of them. Results are shown in a plot, and the lists of genes corresponding to each region can be obtained.
 }
 \usage{
-Venn2Plot(listG1, listG2, listNames, filename, data4T = NULL, symbols = TRUE, mkExcel = TRUE, colnmes = c("AffyID", "Symbol"))
+Venn2Plot(listG1, listG2, listNames, filename, data4T = NULL, symbols = TRUE, mkExcel = TRUE, colnmes = c("AffyID", "Symbol"), img.fmt= "pdf")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,6 +35,9 @@ Logical. If TRUE makes an .xlsx file with the lists of genes corresponding to ea
 }
   \item{colnmes}{
 Column names corresponding to the array IDs and gene symbols in the data frame data4T.
+}
+  \item{img.fmt}{
+Default "pdf", if "png" the Venn plot is generated in .png image format.
 }
 }
 \details{
