@@ -8,7 +8,7 @@ Venn diagrams for three tables of genes.
 Function to make Venn diagrams from three vectors containing gene symbols or gene ids. Results are shown in a plot, and the lists of genes corresponding to each region can be obtained.
 }
 \usage{
-Venn3Plot.st(list1, list2, list3, listNames, filename, Table1, Table2, Table3, ColName = "GeneSymbol", resDir = NULL)
+Venn3Plot.st(list1, list2, list3, listNames, filename, Table1, Table2, Table3, img.fmt = "pdf", ColName = "GeneSymbol", resDir = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,6 +35,9 @@ Table with gene information in list2.
 }
   \item{Table3}{
 Table with gene information in list3.
+}
+  \item{img.fmt}{
+Default "pdf", if "png" the Venn plot is generated in .png image format.
 }
   \item{ColName}{
 Name of the column containing gene symbols and common in Table1, Table2 and Table3.
