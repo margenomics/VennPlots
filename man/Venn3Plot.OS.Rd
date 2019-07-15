@@ -8,7 +8,7 @@ Venn diagrams from three lists of genes.
 Function to make Venn diagrams from three vectors of genes. Results are shown in a plot, and the lists of genes corresponding to each region can be obtained with mkExcel in .xlsx format.
 }
 \usage{
-Venn3Plot.OS(listG1, listG2, listG3, listNames, filename, data4T = NULL, mkExcel = TRUE)
+Venn3Plot.OS(listG1, listG2, listG3, listNames, filename, data4T = NULL, mkExcel = TRUE, img.fmt = "pdf")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +32,9 @@ Data frame with a column named "Symbol" containing gene symbols in listG1, listG
 }
   \item{mkExcel}{
 Logical. If TRUE makes an .xlsx file with the lists of genes corresponding to each region.
+}
+  \item{img.fmt}{
+Default "pdf", if "png" the Venn plot is generated in .png image format.
 }
 }
 \details{
