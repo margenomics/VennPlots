@@ -8,7 +8,7 @@ Venn diagrams for four tables of genes.
 Function to make Venn diagrams from four tables containing the columns with array ids or gene symbols, ideally both of them. Results are shown in a plot, and the lists of genes corresponding to each region can be obtained.
 }
 \usage{
-Venn4Plot(listG1, listG2, listG3, listG4, listNames, filename, data4T = NULL, symbols = TRUE, mkExcel = TRUE, colnmes = c("AffyID", "Symbol"))
+Venn4Plot(listG1, listG2, listG3, listG4, listNames, filename, data4T = NULL, img.fmt = "pdf", symbols = TRUE, mkExcel = TRUE, colnmes = c("AffyID", "Symbol"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +32,9 @@ Name of the output files.
 }
   \item{data4T}{
 Table with the structure of data4Tyers with columns named scaled at the begining.
+}
+  \item{img.fmt}{
+Default "pdf", if "png" the Venn plot is generated in .png image format.
 }
   \item{symbols}{
 Logical. Use symbols instead of AffyID to make plots.
