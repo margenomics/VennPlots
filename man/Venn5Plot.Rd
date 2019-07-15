@@ -8,23 +8,24 @@ Venn diagrams for five tables of genes.
 Function to make Venn diagrams from five tables containing the columns with array ids or gene symbols, ideally both of them. Results are shown in a plot, and the lists of genes corresponding to each region can be obtained.
 }
 \usage{
-Venn5Plot(listG1, listG2, listG3, listG4, listG5, listNames, filename, data4T = NULL, symbols = TRUE, mkExcel = TRUE, colnmes = c("AffyID", "Symbol"), CatCex = 0.8, CatDist = rep(0.1, 5))
+Venn5Plot(list.1,list.2,list.3,list.4,list.5,listNames,filename,data4T= NULL,
+           img.fmt = "pdf", mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{listG1}{
+  \item{list.1}{
 First list of genes to compare in the Venn diagram. It has to be a data.frame with columns "AffyID" or "Symbol", ideally both of them.
 }
-  \item{listG2}{
+  \item{list.2}{
 Second list of genes to compare in the Venn diagram. It has to be a data.frame with columns "AffyID" or "Symbol", ideally both of them.
 }
-  \item{listG3}{
+  \item{list.3}{
 Third list of genes to compare in the Venn diagram. It has to be a data.frame with columns "AffyID" or "Symbol", ideally both of them.
 }
-  \item{listG4}{
+  \item{list.4}{
 Fourth list of genes to compare in the Venn diagram. It has to be a data.frame with columns "AffyID" or "Symbol", ideally both of them.
 }
-  \item{listG5}{
+  \item{list.5}{
 Fifth list of genes to compare in the Venn diagram. It has to be a data.frame with columns "AffyID" or "Symbol", ideally both of them.
 }
   \item{listNames}{
@@ -36,8 +37,8 @@ Name of the output files.
   \item{data4T}{
 Table with the structure of data4Tyers with columns named scaled at the begining.
 }
-  \item{symbols}{
-Logical. Use symbols instead of AffyID to make plots.
+  \item{img.fmt}{
+Default "pdf", if "png" the Venn plot is generated in .png image format.
 }
   \item{mkExcel}{
 Logical. If TRUE makes an .xlsx file with the lists of genes corresponding to each region.
