@@ -1,5 +1,5 @@
 Venn4Plot.st <-
-function(list1, list2, list3, list4,listNames, filename, Table1, img.fmt = "pdf",
+function(list1, list2, list3, list4,listNames, filename, img.fmt = "pdf", Table1, 
                       Table2, Table3, Table4, ColName= "GeneSymbol", resDir=NULL ){
   
   #list1: Vector amb els Gene symbols de una de les llistes
