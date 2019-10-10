@@ -12,10 +12,12 @@ function(listG1, listG2, listNames, filename, data4T= NULL, symbols=TRUE,
   #colnmes: Nom de les columnes AffyID i Symbol
   #20/9/16 Lara corregeixo per a que a la intersecció hi hagi els ids d'un o de l'altre i no hagin de ser coincidents doncs
   #els symbols poden estar a la intersecció i correspondre a diferents ids.
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
   require(RColorBrewer)  
+  require(openxlsx)
   #establim els colors per als plots
   
   cols <- brewer.pal(8,"Pastel2") 
@@ -48,46 +50,45 @@ function(listG1, listG2, listNames, filename, data4T= NULL, symbols=TRUE,
   
   if(mkExcel) {
     #EXCEL
-    options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-    require(XLConnect)
-    xlcFreeMemory()
     cNames <- colnames(data4T)[-grep("scaled$", colnames(data4T))]
     #cNames <- colnames(data4T)
+    hs1 <- createStyle(fgFill = "#737373", halign = "CENTER", textDecoration = "Bold",
+                       border = "Bottom", fontColour = "white")
     if (symbols) {
-      wb <- loadWorkbook(file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),create=TRUE)
-      createSheet(wb, name = listNames[1])
-      writeWorksheet(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
+      wb <- createWorkbook()
+      addWorksheet(wb, sheetName = listNames[1])
+      writeData(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
                                  (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`10`)) & 
                                  (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]), cNames], 
-                     sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = listNames[2])
-      writeWorksheet(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
+                     sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = listNames[2])
+      writeData(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
                                  (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`01`)) & 
                                  (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]), cNames], 
-                     sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Common")
-      writeWorksheet(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
+                     sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Common")
+      writeData(wb,data4T[(!is.na(data4T[,colnmes[2]])) & 
                                  (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`11`)) & 
                                  (data4T[,colnmes[1]] %in% listG1[,colnmes[1]] |  #aquí corregit 20/9/16
                                  data4T[,colnmes[1]] %in% listG2[,colnmes[1]]),cNames],
-                     sheet = "Common", startRow = 1, startCol = 1, header=TRUE)
-      saveWorkbook(wb)
+                     sheet = "Common", startRow = 1, startCol = 1, headerStyle = hs1)
+      saveWorkbook(wb,file=file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
     }else {
       
-      wb <- loadWorkbook(file.path(resultsDir,paste("VennGeneLists",filename,"xlsx",sep=".")),create=TRUE)
-      createSheet(wb, name = listNames[1])
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`10`),
+      wb <- createWorkbook()
+      addWorksheet(wb, sheetName = listNames[1])
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`10`),
                                cNames], 
-                     sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = listNames[2])
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`01`),
+                     sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = listNames[2])
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`01`),
                                cNames], 
-                     sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Common")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`11`),
+                     sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Common")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`11`),
                                cNames],
-                     sheet = "Common", startRow = 1, startCol = 1, header=TRUE)
-      saveWorkbook(wb)
+                     sheet = "Common", startRow = 1, startCol = 1, headerStyle = hs1)
+      saveWorkbook(wb,file = file.path(resultsDir,paste("VennGeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
     }
   }
 }
