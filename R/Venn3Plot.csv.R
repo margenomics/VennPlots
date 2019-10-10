@@ -10,9 +10,12 @@ function(listG1, listG2, listG3, listNames,filename ,data4T= NULL, symbols=TRUE,
   #symbols: if TRUE gene symbols are used to make the venn 
   #mkExcel: if TRUE an excel is made with the results of the venn diagram
   #colnmes: Nom de les columnes AffyID i Symbol
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
+  
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
   require(RColorBrewer)  
+  require(openxlsx)
   #establim els colors per als plots
   cols <- brewer.pal(8,"Pastel2") 
   
@@ -47,88 +50,85 @@ function(listG1, listG2, listG3, listNames,filename ,data4T= NULL, symbols=TRUE,
   
   if(mkExcel){
     #EXCEL
-    options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-    require(XLConnect)
-    xlcFreeMemory()
     cNames <- colnames(data4T)[-grep("scaled$", colnames(data4T))]
-    
+    hs1 <- createStyle(fgFill = "#737373", halign = "CENTER", textDecoration = "Bold",
+                       border = "Bottom", fontColour = "white")
     if(symbols){
-      wb <- loadWorkbook(file.path(resultsDir,paste("GeneLists",filename,".xlsx",sep=".")),create=TRUE) #no li agraden els espais al nom o noms llargs!
-      createSheet(wb, name = "orange") 
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`100`)) & 
-                                     (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "orange", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "blue")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`010`)) & 
-                                     (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "blue", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "green")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`001`)) & 
-                                     (data4T[,colnmes[1]] %in% listG3[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "green", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "pink")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`110`)) & 
-                                     (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) &
-                                     (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "pink", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "brown")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`011`)) & 
-                                     (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]) &
-                                     (data4T[,colnmes[1]] %in% listG3[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "brown", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "yellow")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`101`)) & 
-                                     (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) &
-                                     (data4T[,colnmes[1]] %in% listG3[,colnmes[1]]),
-                                     cNames], 
-                     sheet = "yellow", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Common grey")
-      writeWorksheet(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`111`)) &
-                                     (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) &
-                                     (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]) &
-                                     (data4T[,colnmes[1]] %in% listG3[,colnmes[1]]),cNames], 
-                     sheet = "Common grey", startRow = 1, startCol = 1, header=TRUE)
-      saveWorkbook(wb)
-    
-    }else{
-      wb <- loadWorkbook(file.path(resultsDir,
-                                   paste("GeneLists",filename,".xlsx",sep=".")),
-                         create=TRUE) #no li agraden els espais al nom o noms llargs!
+      wb <- createWorkbook() #no li agraden els espais al nom o noms llargs!
+      addWorksheet(wb, sheetName = "orange") 
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`100`)) & 
+                            (data4T[,colnmes[1]] %in% listG1[,colnmes[1]]),
+                          cNames], 
+                sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "blue")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`010`)) & 
+                            (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]),
+                          cNames], 
+                sheet = "blue", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "green")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`001`)) & 
+                            (data4T[,colnmes[1]] %in% listG3[,colnmes[1]]),
+                          cNames], 
+                sheet = "green", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "pink")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`110`)) & 
+                            ((data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) |
+                               (data4T[,colnmes[1]] %in% listG2[,colnmes[1]])),
+                          cNames], 
+                sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "brown")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`011`)) & 
+                            ((data4T[,colnmes[1]] %in% listG2[,colnmes[1]]) |
+                               (data4T[,colnmes[1]] %in% listG3[,colnmes[1]])),
+                          cNames], 
+                sheet = "brown", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "yellow")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`101`)) & 
+                            ((data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) |
+                               (data4T[,colnmes[1]] %in% listG3[,colnmes[1]])),
+                          cNames], 
+                sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Common grey")
+      writeData(wb,data4T[!is.na(data4T[,colnmes[2]]) & (data4T[,colnmes[2]] %in% unlist(vtest@IntersectionSets$`111`)) &
+                            ((data4T[,colnmes[1]] %in% listG1[,colnmes[1]]) |
+                               (data4T[,colnmes[1]] %in% listG2[,colnmes[1]]) |
+                               (data4T[,colnmes[1]] %in% listG3[,colnmes[1]])),cNames], 
+                sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
+      saveWorkbook(wb,file=file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
       
-      createSheet(wb, name = "orange") 
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`100`),
-                               cNames], 
-                     sheet = "orange", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "blue")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`010`),
-                               cNames], 
-                     sheet = "blue", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "green")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`001`),
-                               cNames], 
-                     sheet = "green", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "pink")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`110`),
-                               cNames], 
-                     sheet = "pink", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "brown")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`011`),
-                               cNames], 
-                     sheet = "brown", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "yellow")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`101`),
-                               cNames], 
-                     sheet = "yellow", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Common grey")
-      writeWorksheet(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`111`),
-                               cNames], 
-                     sheet = "Common grey", startRow = 1, startCol = 1, header=TRUE)
-      saveWorkbook(wb)
+    }else{
+      wb <- createWorkbook()
+      
+      addWorksheet(wb, sheetName = "orange") 
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`100`),
+                          cNames], 
+                sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "blue")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`010`),
+                          cNames], 
+                sheet = "blue", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "green")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`001`),
+                          cNames], 
+                sheet = "green", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "pink")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`110`),
+                          cNames], 
+                sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "brown")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`011`),
+                          cNames], 
+                sheet = "brown", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "yellow")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`101`),
+                          cNames], 
+                sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Common grey")
+      writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`111`),
+                          cNames], 
+                sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
+      saveWorkbook(wb,file=file.path(resultsDir,
+                                     paste("GeneLists",filename,"xlsx",sep=".")), overwrite = TRUE)
       
     }
   }
