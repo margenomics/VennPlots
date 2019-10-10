@@ -12,10 +12,12 @@ function(list1, list2, list3, list4,listNames, filename, img.fmt = "pdf", Table1
   #Table2: Dataset del segon mÃ¨tode
   #Table3: Dataset del tercer mÃ¨tode
   #Table4: Dataset del quart mÃ¨tode
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
   require(RColorBrewer)  
+  require(openxlsx)
   #establim els colors per als plots
   cols <- c(brewer.pal(8,"Pastel1"), brewer.pal(8,"Pastel2"))  #Fixar els colors per als venn diagrams amb 4 condicions
   cols <- cols[c(8,2,3,15,5,6,7,1,9,10,11,12,13,14,4,16)]      ##Reorganitzar els colors per a que no coincideixin tonalitats semblants
@@ -48,23 +50,21 @@ function(list1, list2, list3, list4,listNames, filename, img.fmt = "pdf", Table1
   
   
   #EXCEL
-  options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-  require(XLConnect)
-  xlcFreeMemory()
-  
-  wb <- loadWorkbook(file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),create=TRUE) #no li agraden els espais al nom o noms llargs!
-  createSheet(wb, name = listNames[1]) 
-  writeWorksheet(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
-                 sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[2])
-  writeWorksheet(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
-                 sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[3])
-  writeWorksheet(wb,Table3[Table3[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
-                 sheet = listNames[3], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[4])
-  writeWorksheet(wb,Table4[Table4[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
-                 sheet = listNames[4], startRow = 1, startCol = 1, header=TRUE)
-  saveWorkbook(wb)
+  hs1 <- createStyle(fgFill = "#737373", halign = "CENTER", textDecoration = "Bold",
+                     border = "Bottom", fontColour = "white")
+  wb <- createWorkbook() 
+  addWorksheet(wb, sheetName = listNames[1]) 
+  writeData(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
+                 sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[2])
+  writeData(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
+                 sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[3])
+  writeData(wb,Table3[Table3[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
+                 sheet = listNames[3], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[4])
+  writeData(wb,Table4[Table4[,ColName] %in% unlist(vtest@IntersectionSets$`1111`),], 
+                 sheet = listNames[4], startRow = 1, startCol = 1, headerStyle = hs1)
+  saveWorkbook(wb,file=file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
   
 }

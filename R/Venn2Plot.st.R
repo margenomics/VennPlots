@@ -9,8 +9,6 @@ function(list1, list2, listNames, filename, Table1, Table2, img.fmt = "pdf",
   #Table1: Dataset del primer mÃ¨tode
   #Table2: Dataset del segon mÃ¨tode
   #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
-  # Also modified excel sheets from '11' to three sheets with '10' '01' '11'
-  
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
