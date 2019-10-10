@@ -1,8 +1,12 @@
 Venn5Plot <- function(list.1,list.2,list.3,list.4,list.5,listNames,filename,data4T= NULL,
            img.fmt = "pdf", mkExcel = TRUE,colnmes= "Symbol", CatCex=0.8, CatDist=rep(0.1, 5)){ 
+  
+    #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
+  
     require(Vennerable) 
     require(colorfulVennPlot) #Per generar plots amb colors diferents
     require(RColorBrewer)
+    require(openxlsx)
     
     cols <- c(brewer.pal(8,"Pastel1"), brewer.pal(8,"Pastel2"))  #Fixar els colors per als venn diagrams amb 4 condicions
     cols <- cols[c(8,2,3,15,5,6,7,1,9,10,11,12,13,14,4,16)]      ##Reorganitzar els colors per a que no coincideixin tonalitats semblants
@@ -59,116 +63,114 @@ Venn5Plot <- function(list.1,list.2,list.3,list.4,list.5,listNames,filename,data
       margin = 0.05,
       cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
               1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
-      ind = TRUE)
+      ind = F)
     
     dev.off()
     
     if(mkExcel) {
       #EXCEL
-      options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-      require(XLConnect)
-      xlcFreeMemory()
-      
-      wb <- loadWorkbook(file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),create=TRUE)
+      hs1 <- createStyle(fgFill = "#737373", halign = "CENTER", textDecoration = "Bold",
+                         border = "Bottom", fontColour = "white")
+      wb <- createWorkbook()
    
-      createSheet(wb, name = "Blue")
-      writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10000`),], 
-                       sheet = "Blue", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Yellow")
-      writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01000`),], 
-                       sheet = "Yellow", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Orange")
-      writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00100`),],
-                       sheet = "Orange", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Green")
-      writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00010`),],
-                       sheet = "Green", startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Purple")
-      writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00001`),],
-                       sheet = "Purple", startRow = 1, startCol = 1, header=TRUE)
+      addWorksheet(wb, sheetName = "Blue")
+      writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10000`),], 
+                       sheet = "Blue", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Yellow")
+      writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01000`),], 
+                       sheet = "Yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Orange")
+      writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00100`),],
+                       sheet = "Orange", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Green")
+      writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00010`),],
+                       sheet = "Green", startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Purple")
+      writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00001`),],
+                       sheet = "Purple", startRow = 1, startCol = 1, headerStyle = hs1)
         ###############################################################################################
-        createSheet(wb, name = "Blue.Yellow")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11000`),],
-                       sheet = "Blue.Yellow", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Orange")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10100`),],
-                       sheet = "Blue.Orange", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10010`),],
-                       sheet = "Blue.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10001`),],
-                       sheet = "Blue.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Orange")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01100`),],
-                       sheet = "Yellow.Orange", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01010`),],
-                       sheet = "Yellow.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01001`),],
-                       sheet = "Yellow.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Orange.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00110`),],
-                       sheet = "Orange.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Orange.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00101`),],
-                       sheet = "Orange.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00011`),],
-                       sheet = "Green.Purple", startRow = 1, startCol = 1, header=TRUE)
+        addWorksheet(wb, sheetName = "Blue.Yellow")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11000`),],
+                       sheet = "Blue.Yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Orange")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10100`),],
+                       sheet = "Blue.Orange", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10010`),],
+                       sheet = "Blue.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10001`),],
+                       sheet = "Blue.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Orange")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01100`),],
+                       sheet = "Yellow.Orange", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01010`),],
+                       sheet = "Yellow.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01001`),],
+                       sheet = "Yellow.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Orange.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00110`),],
+                       sheet = "Orange.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Orange.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00101`),],
+                       sheet = "Orange.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00011`),],
+                       sheet = "Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
         ##############################################################################################
-        createSheet(wb, name = "Blue.Yellow.Orange")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11100`),],
-                       sheet = "Blue.Yellow.Orange", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Yellow.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11010`),],
-                       sheet = "Blue.Yellow.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Yellow.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11001`),],
-                       sheet = "Blue.Yellow.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Orange.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10110`),],
-                       sheet = "Blue.Orange.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Orange.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10101`),],
-                       sheet = "Blue.Orange.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10011`),],
-                       sheet = "Blue.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Orange.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01110`),],
-                       sheet = "Yellow.Orange.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Orange.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01101`),],
-                       sheet = "Yellow.Orange.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01011`),],
-                       sheet = "Yellow.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Orange.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00111`),],
-                       sheet = "Orange.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Orange")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11100`),],
+                       sheet = "Blue.Yellow.Orange", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11010`),],
+                       sheet = "Blue.Yellow.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11001`),],
+                       sheet = "Blue.Yellow.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Orange.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10110`),],
+                       sheet = "Blue.Orange.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Orange.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10101`),],
+                       sheet = "Blue.Orange.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10011`),],
+                       sheet = "Blue.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Orange.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01110`),],
+                       sheet = "Yellow.Orange.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Orange.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01101`),],
+                       sheet = "Yellow.Orange.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01011`),],
+                       sheet = "Yellow.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Orange.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`00111`),],
+                       sheet = "Orange.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
         ############################################################################################
-        createSheet(wb, name = "Blue.Yellow.Orange.Green")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11110`),],
-                       sheet = "Blue.Yellow.Orange.Green", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Orange.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10111`),],
-                       sheet = "Blue.Orange.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Yellow.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11011`),],
-                       sheet = "Blue.Yellow.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Blue.Yellow.Orange.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11101`),],
-                       sheet = "Blue.Yellow.Orange.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Yellow.Orange.Green.Purple")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01111`),],
-                       sheet = "Yellow.Orange.Green.Purple", startRow = 1, startCol = 1, header=TRUE)
-        createSheet(wb, name = "Common.All")
-        writeWorksheet(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11111`),],
-                       sheet = "Common.All", startRow = 1, startCol = 1, header=TRUE)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Orange.Green")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11110`),],
+                       sheet = "Blue.Yellow.Orange.Green", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Orange.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`10111`),],
+                       sheet = "Blue.Orange.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11011`),],
+                       sheet = "Blue.Yellow.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Blue.Yellow.Orange.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11101`),],
+                       sheet = "Blue.Yellow.Orange.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Yellow.Orange.Green.Purple")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`01111`),],
+                       sheet = "Yellow.Orange.Green.Purple", startRow = 1, startCol = 1, headerStyle = hs1)
+        addWorksheet(wb, sheetName = "Common.All")
+        writeData(wb,data4T[data4T[,colnmes] %in% unlist(vtest@IntersectionSets$`11111`),],
+                       sheet = "Common.All", startRow = 1, startCol = 1, headerStyle = hs1)
       
-      saveWorkbook(wb)
+      saveWorkbook(wb,file=file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
     }
     
   }
