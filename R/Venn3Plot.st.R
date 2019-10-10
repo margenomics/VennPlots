@@ -10,10 +10,12 @@ function(list1, list2, list3, listNames, filename, Table1, Table2,
   #Table1: Dataset del primer mÃ¨tode
   #Table2: Dataset del segon mÃ¨tode
   #Table3: Dataset del tercer mÃ¨tode
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
   require(RColorBrewer)  
+  require(openxlsx)
   #establim els colors per als plots
   cols <- brewer.pal(8,"Pastel2") 
   
@@ -44,20 +46,16 @@ function(list1, list2, list3, listNames, filename, Table1, Table2,
   
   
   #EXCEL
-  options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-  require(XLConnect)
-  xlcFreeMemory()
-    
-  wb <- loadWorkbook(file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),create=TRUE) #no li agraden els espais al nom o noms llargs!
-  createSheet(wb, name = listNames[1]) 
-  writeWorksheet(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
-                     sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[2])
-  writeWorksheet(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
-                     sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[3])
-  writeWorksheet(wb,Table3[Table3[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
-                     sheet = listNames[3], startRow = 1, startCol = 1, header=TRUE)
-  saveWorkbook(wb)
-   
+  wb <- createWorkbook()  
+  addWorksheet(wb, sheetName = listNames[1]) 
+  writeData(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
+                     sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[2])
+  writeData(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
+                     sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[3])
+  writeData(wb,Table3[Table3[,ColName] %in% unlist(vtest@IntersectionSets$`111`),], 
+                     sheet = listNames[3], startRow = 1, startCol = 1, headerStyle = hs1)
+  saveWorkbook(wb,file=file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
+  
 }
