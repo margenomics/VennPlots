@@ -7,10 +7,12 @@ function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE, img.
   #filename: Nom dels fitxers
   #data4T: Data4Tyers
   #mkExcel: if TRUE an excel is made with the results of the venn diagram
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
-  require(RColorBrewer)  
+  require(RColorBrewer)
+  require(openxlsx)
   #establim els colors per als plots
   
   cols <- brewer.pal(8,"Pastel2") 
@@ -37,25 +39,24 @@ function(listG1, listG2, listNames, filename, data4T= NULL, mkExcel = TRUE, img.
   
   if(mkExcel) {
     #EXCEL
-    options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-    require(XLConnect)
-    xlcFreeMemory()
     #cNames <- colnames(data4T)[-grep("scaled$", colnames(data4T))]
     cNames <- colnames(data4T)
-      wb <- loadWorkbook(file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),create=TRUE)
-      createSheet(wb, name = listNames[1])
-      writeWorksheet(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
+    hs1 <- createStyle(fgFill = "#737373", halign = "CENTER", textDecoration = "Bold",
+                       border = "Bottom", fontColour = "white")
+      wb <- createWorkbook()
+      addWorksheet(wb, sheetName = listNames[1])
+      writeData(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
                                  (data4T[,"Symbol"] %in% unlist(vtest@IntersectionSets$`10`)), cNames], 
-                     sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = listNames[2])
-      writeWorksheet(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
+                     sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = listNames[2])
+      writeData(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
                                  (data4T[,"Symbol"] %in% unlist(vtest@IntersectionSets$`01`)), cNames], 
-                     sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-      createSheet(wb, name = "Common")
-      writeWorksheet(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
+                     sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+      addWorksheet(wb, sheetName = "Common")
+      writeData(wb,data4T[(!is.na(data4T[,"Symbol"])) & 
                                  (data4T[,"Symbol"] %in% unlist(vtest@IntersectionSets$`11`)),cNames],
-                     sheet = "Common", startRow = 1, startCol = 1, header=TRUE)
-      saveWorkbook(wb)
+                     sheet = "Common", startRow = 1, startCol = 1, headerStyle = hs1)
+      saveWorkbook(wb,file = file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
       
   }
 }
