@@ -8,10 +8,14 @@ function(list1, list2, listNames, filename, Table1, Table2, img.fmt = "pdf",
   #filename: Nom del output file
   #Table1: Dataset del primer mÃ¨tode
   #Table2: Dataset del segon mÃ¨tode
+  #11/10/19 use 'openxlsx' package to write xlsx files, no java dependencies
+  # Also modified excel sheets from '11' to three sheets with '10' '01' '11'
+  
   
   require(Vennerable) 
   require(colorfulVennPlot) #Per generar plots amb colors diferents
   require(RColorBrewer)  
+  require(openxlsx)
   #establim els colors per als plots
   cols <- brewer.pal(8,"Pastel2") 
   
@@ -40,17 +44,17 @@ function(list1, list2, listNames, filename, Table1, Table2, img.fmt = "pdf",
   dev.off()
   
   #EXCEL
-  options( java.parameters = "-Xmx4g" ) #super important abans de cridar a XLConnect
-  require(XLConnect)
-  xlcFreeMemory()
   
-  wb <- loadWorkbook(file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),create=TRUE) #no li agraden els espais al nom o noms llargs!
-  createSheet(wb, name = listNames[1]) 
-  writeWorksheet(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`11`),], 
-                 sheet = listNames[1], startRow = 1, startCol = 1, header=TRUE)
-  createSheet(wb, name = listNames[2])
-  writeWorksheet(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`11`),], 
-                 sheet = listNames[2], startRow = 1, startCol = 1, header=TRUE)
-  saveWorkbook(wb)
+  wb <- createWorkbook() 
+  addWorksheet(wb, sheetName = listNames[1]) 
+  writeData(wb,Table1[Table1[,ColName] %in% unlist(vtest@IntersectionSets$`10`),], 
+                 sheet = listNames[1], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = listNames[2])
+  writeData(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`01`),], 
+                 sheet = listNames[2], startRow = 1, startCol = 1, headerStyle = hs1)
+  addWorksheet(wb, sheetName = "Common")
+  writeData(wb,Table2[Table2[,ColName] %in% unlist(vtest@IntersectionSets$`11`),], 
+            sheet = "Common", startRow = 1, startCol = 1, headerStyle = hs1)
+  saveWorkbook(wb,file=file.path(resultsDir,paste("GeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
   
 }
