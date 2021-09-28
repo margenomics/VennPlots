@@ -232,51 +232,61 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                     sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,paste("UP.VennGeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
           
+          vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
+                        length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
+                        length(unique(data7.f$Symbol)))
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("UP.VennDiagram",filename,"png",sep=".")))
+          }else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("UP.VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }else{
           wb <- createWorkbook()
           
-          addWorksheet(wb, sheetName = "yellow") 
+          addWorksheet(wb, sheetName = "orange") 
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`100`),
                               cNames], 
-                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
           addWorksheet(wb, sheetName = "blue")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`010`),
                               cNames], 
                     sheet = "blue", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "pink")
+          addWorksheet(wb, sheetName = "green")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`001`),
                               cNames], 
-                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "orange")
+                    sheet = "green", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "pink")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`110`),
                               cNames], 
-                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green1")
+                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "brown")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`011`),
                               cNames], 
-                    sheet = "green1", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green2")
+                    sheet = "brown", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "yellow")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`101`),
                               cNames], 
-                    sheet = "green2", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "Common brown")
+                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "Common grey")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`111`),
                               cNames], 
-                    sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,
                                          paste("UP.VennGeneLists",filename,"xlsx",sep=".")), overwrite = TRUE)
+          vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
+          
+          #PLOT VENN
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("UP.VennDiagram",filename,"png",sep=".")))
+          } else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("UP.VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), 
+                     Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }
-      vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
-                    length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
-                    length(unique(data7.f$Symbol)))
-      if(img.fmt == "png") {
-        png(file.path(resultsDir,paste("UP.VennDiagram",filename,"png",sep=".")))
-      }else if (img.fmt == "pdf"){
-        pdf(file.path(resultsDir,paste("UP.VennDiagram",filename,"pdf",sep=".")))
-      }
-      plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
-      dev.off()
-      ##### CHANGE THE COLORS
       ##### down ######
       cols <- brewer.pal(8,"Pastel2") 
       #Creem l'objecte del Venn
@@ -385,54 +395,64 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                                     (data7.f[,colnmes[1]] %in% listG3_dn[,colnmes[1]])),cNames], 
                     sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,paste("DN.VennGeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
-          
+          vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
+                        length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
+                        length(unique(data7.f$Symbol)))
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("DN.VennDiagram",filename,"png",sep=".")))
+          }else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("DN.VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }else{
           wb <- createWorkbook()
           
-          addWorksheet(wb, sheetName = "yellow") 
+          addWorksheet(wb, sheetName = "orange") 
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`100`),
                               cNames], 
-                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
           addWorksheet(wb, sheetName = "blue")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`010`),
                               cNames], 
                     sheet = "blue", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "pink")
+          addWorksheet(wb, sheetName = "green")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`001`),
                               cNames], 
-                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "orange")
+                    sheet = "green", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "pink")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`110`),
                               cNames], 
-                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green1")
+                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "brown")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`011`),
                               cNames], 
-                    sheet = "green1", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green2")
+                    sheet = "brown", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "yellow")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`101`),
                               cNames], 
-                    sheet = "green2", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "Common brown")
+                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "Common grey")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`111`),
                               cNames], 
-                    sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,
                                          paste("DN.VennGeneLists",filename,"xlsx",sep=".")), overwrite = TRUE)
+          vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
+          
+          #PLOT VENN
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("DN.VennDiagram",filename,"png",sep=".")))
+          } else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("DN.VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), 
+                     Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }
-      vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
-                    length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
-                    length(unique(data7.f$Symbol)))
-      if(img.fmt == "png") {
-        png(file.path(resultsDir,paste("DN.VennDiagram",filename,"png",sep=".")))
-      }else if (img.fmt == "pdf"){
-        pdf(file.path(resultsDir,paste("DN.VennDiagram",filename,"pdf",sep=".")))
-      }
-      plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
-      dev.off()
-      ##### down ######
-      cols <- brewer.pal(8,"Pastel2") 
     }else{
+      ##### ALL ######
+      cols <- brewer.pal(8,"Pastel2") 
       if(pval!=0) {
         listG1 <- data4T[abs(data4T[paste("logFC",contrast.l[1],sep=".")]) > logFC & data4T[paste("P.Value", contrast.l[1],sep=".")] < pval,]
         listG2 <- data4T[abs(data4T[paste("logFC",contrast.l[2],sep=".")]) > logFC & data4T[paste("P.Value", contrast.l[2],sep=".")] < pval,]
@@ -553,52 +573,61 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                                     (data7.f[,colnmes[1]] %in% listG3[,colnmes[1]])),cNames], 
                     sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,paste("VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
-
+          vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
+                        length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
+                        length(unique(data7.f$Symbol)))
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
+          }else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }else {
           wb <- createWorkbook()
           
-          addWorksheet(wb, sheetName = "yellow") 
+          addWorksheet(wb, sheetName = "orange") 
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`100`),
                               cNames], 
-                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
           addWorksheet(wb, sheetName = "blue")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`010`),
                               cNames], 
                     sheet = "blue", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "pink")
+          addWorksheet(wb, sheetName = "green")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`001`),
                               cNames], 
-                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "orange")
+                    sheet = "green", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "pink")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`110`),
                               cNames], 
-                    sheet = "orange", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green1")
+                    sheet = "pink", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "brown")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`011`),
                               cNames], 
-                    sheet = "green1", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "green2")
+                    sheet = "brown", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "yellow")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`101`),
                               cNames], 
-                    sheet = "green2", startRow = 1, startCol = 1, headerStyle = hs1)
-          addWorksheet(wb, sheetName = "Common brown")
+                    sheet = "yellow", startRow = 1, startCol = 1, headerStyle = hs1)
+          addWorksheet(wb, sheetName = "Common grey")
           writeData(wb,data4T[data4T[,colnmes[1]] %in% unlist(vtest@IntersectionSets$`111`),
                               cNames], 
-                    sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
+                    sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,
                                          paste("VennGenes",filename,"xlsx",sep=".")), overwrite = TRUE)                                       
+          vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
+          
+          #PLOT VENN
+          if(img.fmt == "png") {
+            png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
+          } else if (img.fmt == "pdf"){
+            pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
+          }
+          plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), 
+                     Colors=cols, Title="", shrink=0.5)
+          dev.off()
         }
-      vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
-                    length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
-                    length(unique(data7.f$Symbol)))
-      if(img.fmt == "png") {
-        png(file.path(resultsDir,paste("VennDiagram",filename,"png",sep=".")))
-      }else if (img.fmt == "pdf"){
-        pdf(file.path(resultsDir,paste("VennDiagram",filename,"pdf",sep=".")))
       }
-      plotVenn3d(vennData, labels=c(listNames[1],listNames[2],listNames[3]), Colors=cols, Title="", shrink=0.5)
-      dev.off()
-      
-    }
   }
 }
