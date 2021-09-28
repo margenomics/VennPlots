@@ -230,7 +230,7 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                                     (data7.f[,colnmes[1]] %in% listG2_up[,colnmes[1]]) |
                                     (data7.f[,colnmes[1]] %in% listG3_up[,colnmes[1]])),cNames], 
                     sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
-          saveWorkbook(wb,file=file.path(resultsDir,paste("UP.VennGeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
+          saveWorkbook(wb,file=file.path(resultsDir,paste("UP.VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
           
           vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
                         length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
@@ -274,7 +274,7 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                               cNames], 
                     sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,
-                                         paste("UP.VennGeneLists",filename,"xlsx",sep=".")), overwrite = TRUE)
+                                         paste("UP.VennGenes",filename,"xlsx",sep=".")), overwrite = TRUE)
           vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
           
           #PLOT VENN
@@ -394,7 +394,7 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                                     (data7.f[,colnmes[1]] %in% listG2_dn[,colnmes[1]]) |
                                     (data7.f[,colnmes[1]] %in% listG3_dn[,colnmes[1]])),cNames], 
                     sheet = "Common brown", startRow = 1, startCol = 1, headerStyle = hs1)
-          saveWorkbook(wb,file=file.path(resultsDir,paste("DN.VennGeneLists",filename,"xlsx",sep=".")),overwrite = TRUE)
+          saveWorkbook(wb,file=file.path(resultsDir,paste("DN.VennGenes",filename,"xlsx",sep=".")),overwrite = TRUE)
           vennData <- c(length(unique(data6.f$Symbol)),length(unique(data4.f$Symbol)), length(unique(data2.f$Symbol)), length(unique(data3.f$Symbol)),
                         length(unique(data5.f$Symbol)),length(unique(data1.f$Symbol)),
                         length(unique(data7.f$Symbol)))
@@ -437,7 +437,7 @@ VennPlot.3 <- function(contrast.l = NULL , listNames, filename, data4T= NULL, sy
                               cNames], 
                     sheet = "Common grey", startRow = 1, startCol = 1, headerStyle = hs1)
           saveWorkbook(wb,file=file.path(resultsDir,
-                                         paste("DN.VennGeneLists",filename,"xlsx",sep=".")), overwrite = TRUE)
+                                         paste("DN.VennGenes",filename,"xlsx",sep=".")), overwrite = TRUE)
           vennData <- sapply(vtest@IntersectionSets,function(x) length(unlist(x)))
           
           #PLOT VENN
