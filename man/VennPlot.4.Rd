@@ -28,5 +28,5 @@
   Create Vennplot for 4 lists and an excel summary of the results
   }
   \examples{
-  VennPlot.4(contrast.l=list(c("WT.vs.NKXX"),c("XXX.vs.WT_3"),c("RRR.vs.WT_5"),c("WT_2.vs.FRR)),listNames=c("WT.vs.NKXX","XXX.vs.WT_3","RRR.vs.WT_5","WT_2.vs.FRR"),filename="Results_Project_20200404",data4T=data4tyers, symbols=T, colnmes=c("AffyID","Symbol"), img.fmt="png",pval=0,padj=0.05,logFC=0.585, up_down=T)
+  VennPlot.4(contrast.l=list(c("WT.vs.NKXX"),c("XXX.vs.WT_3"),c("RRR.vs.WT_5"),c("WT_2.vs.FRR")),listNames=c("WT.vs.NKXX","XXX.vs.WT_3","RRR.vs.WT_5","WT_2.vs.FRR"),filename="Results_Project_20200404",data4T=data4tyers, symbols=T, colnmes=c("AffyID","Symbol"), img.fmt="png",pval=0,padj=0.05,logFC=0.585, up_down=T)
   }
