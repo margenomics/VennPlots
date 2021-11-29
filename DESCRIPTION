@@ -1,7 +1,7 @@
 Package: VennPlots
 Type: Package
 Title: Package to make Venn diagrams and genes corresponding to each region of the plot.
-Version: 1.0
+Version: 2.0.0
 Date: 2018-05-30
 Author: Magdalena Arnal Segura <marnal@imim.es>
 Maintainer: Magdalena Arnal Segura <marnal@imim.es>
