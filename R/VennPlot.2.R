@@ -1,6 +1,12 @@
 VennPlot.2 <- function(contrast.l , listNames, filename, data4T= NULL, symbols=TRUE, 
                              colnmes= c("AffyID", "Symbol"),listSymbols=F,listA=NULL, listB=NULL, 
                              img.fmt= "pdf", pval=0, padj=0.05, logFC=1, up_down=FALSE){
+  
+  require(Vennerable) 
+  require(colorfulVennPlot) #Per generar plots amb colors diferents
+  require(RColorBrewer)  
+  require(openxlsx)  
+  
   if (listSymbols){
     listG1<-listA
     listG2<-listB
