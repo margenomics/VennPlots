@@ -234,8 +234,8 @@ TRAP1
 
 **Green1** 
   
-**Yellow2** 
-ABL1   
+**Yellow2**   
+ABL1     
 MAPK3  
   
 **Purple2**  
