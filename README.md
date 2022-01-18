@@ -211,7 +211,7 @@ XPA
   
 **Brown2**  
   
-**Red** 
+**Red**  
 UCP3  
 VEGFA  
 YWHAZ  
